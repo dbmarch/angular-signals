@@ -8,7 +8,7 @@ import { ChangeDetectorRef } from '@angular/core';
   imports: [CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss', 
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 
 // Change detection occurs on inputs and outputs
@@ -22,19 +22,20 @@ export class AppComponent {
 
   doNothing(){
   }
-
  
+  calculateValue() {
+    console.log('Calculating value...');
+    return 2*this.counter;
+  }
+
   constructor() {
     setInterval(()=>{
       this.counter++;
       console.log(this.counter);
     }, 1000);
 
-    setInterval(() => {
-      this.changeDetector.detectChanges(); // Manually trigger change detection
-    }, 5000)
+    // setInterval(() => {
+    //   this.changeDetector.detectChanges(); // Manually trigger change detection
+    // }, 5000)
   }
-
-
-
 }
