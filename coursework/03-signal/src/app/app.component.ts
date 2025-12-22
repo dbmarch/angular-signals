@@ -11,9 +11,20 @@ import { mySignal } from './my-signal';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  readonly firstSignal = mySignal(42);
-  readonly secondSignal =mySignal('Hello, Angular!');
+  // readonly firstSignal = signal(42);
+  // readonly secondSignal = signal('Hello, Angular!');
   
+  readonly firstSignal = mySignal(42);
+  readonly secondSignal = mySignal('Hello, Angular!');
+  
+  setSignal() {
+    this.firstSignal.set(10);
+  }
+
+  updateSignal() {
+    this.firstSignal.update(value => value + 10);
+  }
+
   constructor() {
     console.log ('signal 1 ', this.firstSignal());
     console.log('signal 2 ', this.secondSignal());
