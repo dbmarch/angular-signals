@@ -19,6 +19,7 @@ import { ChangeDetectorRef } from '@angular/core';
 export class AppComponent {
   counter = 0;
   readonly changeDetector = inject(ChangeDetectorRef);
+
   doNothing()  {
 
   }
@@ -28,7 +29,13 @@ export class AppComponent {
     setInterval(()=>{
       this.counter++;
       console.log(this.counter);
-    }, 5000);
+    }, 1000);
+
+    setInterval(() => {
+      this.changeDetector.detectChanges(); // Manually trigger change detection
+    }, 5000)
   }
+
+
 
 }
