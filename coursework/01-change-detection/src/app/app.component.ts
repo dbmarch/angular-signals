@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { interval } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, interval, map } from 'rxjs';
+
+
+type Options = Record<string, string>;
 
 @Component({
   selector: 'app-root',
@@ -10,25 +13,27 @@ import { interval } from 'rxjs';
   styleUrl: './app.component.scss', 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 // Change detection occurs on inputs and outputs
 // OnPush is used to optimize performance by not checking for changes unless the input or output changes
 // This is useful for large applications with many components
 // OnPush is the default change detection strategy for Angular components
 // OnPush is not suitable for all components, especially those that rely on external data sources or services
 export class AppComponent {
+readonly options$ = new BehaviorSubject<Options>({'r': 'Red', 'g': 'Green', 'b': 'Blue'});
+readonly selectedKey$ = new BehaviorSubject<string>('b');
 
-  // Using interval to create an observable that emits a value every second
-  // This observable can be used to trigger change detection in the component
-  // The counter$ observable is used in the template to display the current value of the counter
-  // The counter$ observable is also used to trigger the calculateValue function every second
-  readonly counter$ = interval(1000);
+readonly selectedValue$ = combineLatest([this.options$, this.selectedKey$]).pipe(
+  debounceTime(0),
+  map(([options, key]) => options[key]),
   
-  calculateValue() {
-    console.log('Calculating value...');
-    return 42;
-  }
+);
 
-  constructor() {
-  }
+switchOptions() {
+  this.options$.next({'m': 'Magenta', 'c': 'Cyan', 'y': 'Yellow'});
+  this.selectedKey$.next('c');
+}
+
+constructor() {
+  this.selectedValue$.subscribe(console.log);
+}
 }
