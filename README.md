@@ -1,3 +1,12 @@
+
+Forked from https://github.com/kobi-hari-udemy/angular-signals
+
+Coursework is in the 'course' subfolder
+
+
+
+
+
 # Modern Angular with Signals - The missing guide
 ![thumbnail](./slides/Thumbnail.png)
 
