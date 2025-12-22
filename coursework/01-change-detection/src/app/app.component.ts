@@ -20,8 +20,7 @@ export class AppComponent {
   counter = 0;
   readonly changeDetector = inject(ChangeDetectorRef);
 
-  doNothing()  {
-
+  doNothing(){
   }
 
  
