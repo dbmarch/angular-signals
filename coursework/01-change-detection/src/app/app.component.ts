@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,7 @@ import { ChangeDetectorRef } from '@angular/core';
   imports: [CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss', 
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 // Change detection occurs on inputs and outputs
@@ -17,25 +17,18 @@ import { ChangeDetectorRef } from '@angular/core';
 // OnPush is the default change detection strategy for Angular components
 // OnPush is not suitable for all components, especially those that rely on external data sources or services
 export class AppComponent {
-  counter = 0;
-  readonly changeDetector = inject(ChangeDetectorRef);
 
-  doNothing(){
-  }
- 
+  // Using interval to create an observable that emits a value every second
+  // This observable can be used to trigger change detection in the component
+  // The counter$ observable is used in the template to display the current value of the counter
+  // The counter$ observable is also used to trigger the calculateValue function every second
+  readonly counter$ = interval(1000);
+  
   calculateValue() {
     console.log('Calculating value...');
-    return 2*this.counter;
+    return 42;
   }
 
   constructor() {
-    setInterval(()=>{
-      this.counter++;
-      console.log(this.counter);
-    }, 1000);
-
-    // setInterval(() => {
-    //   this.changeDetector.detectChanges(); // Manually trigger change detection
-    // }, 5000)
   }
 }
