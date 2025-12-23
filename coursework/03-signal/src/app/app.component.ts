@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, computed } from '@angular/core';
 import { mySignal } from './my-signal';
 
 @Component({
@@ -11,11 +11,13 @@ import { mySignal } from './my-signal';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  // readonly firstSignal = signal(42);
-  // readonly secondSignal = signal('Hello, Angular!');
+  // readonly firstSignal = mySignal(42);
+  // readonly secondSignal = mySignal('Hello, Angular!');
+  readonly firstSignal = signal(42);
+  readonly secondSignal = signal('Hello, Angular!');
   
-  readonly firstSignal = mySignal(42);
-  readonly secondSignal = mySignal('Hello, Angular!');
+  readonly thirdSignal = signal(10);
+  readonly derivedSignal  = computed (()=> this.firstSignal() + this.thirdSignal());
   
   setSignal() {
     this.firstSignal.set(10);

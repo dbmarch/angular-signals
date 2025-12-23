@@ -31,8 +31,6 @@ async incA() {
   }
 }
 
-
-
 readonly options$ = new BehaviorSubject<Options>({'r': 'Red', 'g': 'Green', 'b': 'Blue'});
 readonly selectedKey$ = new BehaviorSubject<string>('b');
 
