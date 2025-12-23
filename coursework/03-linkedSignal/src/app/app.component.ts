@@ -12,7 +12,14 @@ import { PRODUCTS } from './products';
 export class AppComponent {
   readonly products = signal(['Apple', 'Banana', 'Cherry']);
 
-  readonly selectedProduct = linkedSignal(() => 'Apple');
+  readonly selectedProduct = linkedSignal<string[], string>({
+    source: this.products,
+    computation: (prod, prev) => {
+      if (!prev) return prod[0];
+      if (prod.includes(prev.value)) return prev;
+      return prod[0];
+    }
+ });
 
   addProduct() {
     this.products.update(prods => [...prods, PRODUCTS[prods.length]]);
