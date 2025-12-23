@@ -4,6 +4,7 @@ import { PRODUCTS } from './products';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -11,7 +12,15 @@ import { PRODUCTS } from './products';
 export class AppComponent {
   readonly products = signal(['Apple', 'Banana', 'Cherry']);
 
-  readonly selectedProduct = signal('Apple');
+  readonly selectedProduct = linkedSignal<string[], string>({
+    source: this.products,
+    computation: (prod, prev) => {
+      if (prev && prod.includes(prev.value)) {
+        return prev.value;
+      }
+      return prod[0];
+    }
+  });
 
   /* 1. Create a simple linked signal that sets the selected product to the first
         product in the list., wheven the inventory changes */
