@@ -16,7 +16,7 @@ export class AppComponent {
     source: this.products,
     computation: (prod, prev) => {
       if (!prev) return prod[0];
-      if (prod.includes(prev.value)) return prev;
+      if (prod.includes(prev.value)) return prev.value;
       return prod[0];
     }
  });
