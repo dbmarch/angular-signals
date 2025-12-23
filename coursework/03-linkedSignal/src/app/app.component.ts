@@ -15,6 +15,7 @@ export class AppComponent {
   readonly selectedProduct = linkedSignal<string[], string>({
     source: this.products,
     computation: (prod, prev) => {
+      console.log (prev);
       if (!prev) return prod[0];
       if (prod.includes(prev.value)) return prev.value;
       return prod[0];
