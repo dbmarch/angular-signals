@@ -9,4 +9,23 @@ import { Component, computed, effect, signal } from '@angular/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  readonly x = signal(10);
+  readonly isLarge =signal(false);
+  readonly xLarge = computed(()=> this.x() > 12);
+
+  incrementX() {
+    this.x.update (v => v + 1);
   }
+
+  constructor() {
+    effect(()=>{
+      if (this.x() > 12) {
+        console.log('x is greater than 12');
+        this.isLarge.set(true);
+      }
+    }, {
+      allowSignalWrites: true
+    });
+  }
+}
+  
