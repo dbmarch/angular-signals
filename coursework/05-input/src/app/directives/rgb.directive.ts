@@ -4,6 +4,7 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { interval } from 'rxjs';
 
 @Directive({
   selector: '[appRgb]',
@@ -28,7 +29,13 @@ export class RgbDirective {
   );
 
   invert() {
+    console.log('invert');
     this.inverted.update((v) => !v);
   }
 
+  // constructor() {
+  //   interval(1000).subscribe(() => {
+  //     this.invert();
+  //   })
+  // }
 }
