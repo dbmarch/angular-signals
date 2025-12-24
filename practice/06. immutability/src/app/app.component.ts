@@ -15,21 +15,24 @@ export class AppComponent {
   constructor() {
     setTimeout(() => {
       // 1. Add a new name to the array
+      this.names.update (names => [...names, 'Dave']);
 
     }, 1000);
 
     setTimeout(() => {
       // 2. Change the name of the person while keeping other properties intact
+      this.person.update( person => ({ ...person, name: 'Bob' }));
 
     }, 2000);
 
     setTimeout(() => {
       // 3. Convert all the names in the array to uppercase
-
+      this.names.update(names => names.map(name => name.toUpperCase()));
     }, 3000);
 
     setTimeout(() => {
       // 4. Remove from the array, the name that begins with 'B'
+      this.names.update(names =>names.filter(name=> !name.startsWith('B')));
       
     }, 4000);
   }
