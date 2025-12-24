@@ -10,7 +10,7 @@ export class ExamService {
     // list of user provided answers
     // isBusy
 
-    readonly #questions = signal <Question[]>([
+  readonly #questions = signal <Question[]>([
       {
         caption: "How much is 4 * 4",
         answers: [ '4', '8', '12', '16'],
@@ -27,27 +27,26 @@ export class ExamService {
         correctAnswerIndex: 1
       }
     ]);
-  readonly questions = this.#questions.asReadonly;
+ 
   firstAns = this.#questions()[0].correctAnswerIndex;
-
-
-
   readonly #userAnswers = signal<number[]>([]);
+
+
+
+  // Computed 
+  readonly questions = this.#questions.asReadonly;
   readonly userAnswers  = computed<Answer[]>(() => this.#userAnswers().map<Answer>((ans, index) => ({
     userAnswerIndex: ans,
     isCorrect: ans === (this.#questions()[index]?.correctAnswerIndex ?? null)
   })));
-  
   readonly #isBusy= signal<boolean>(false);
-  readonly isBusy = this.#isBusy.asReadonly;
-
   readonly currentQuestionIndex = computed(() => this.#userAnswers().length);
   readonly currentQuestion = computed (() => {
     console.log ('currentQuestionIndex', this.currentQuestionIndex());
     return this.#questions()[this.currentQuestionIndex()];
-  }
-  );
+  });
 
+  readonly isBusy = this.#isBusy.asReadonly;
   readonly questionsCount = computed (() => this.#questions().length);
   readonly isQuizDone = computed(() => this.#userAnswers().length == this.questionsCount())
 
@@ -55,7 +54,12 @@ export class ExamService {
     this.userAnswers().filter(ans => ans.isCorrect)
   );
 
-  readonly correctAnswerCount = computed(() => this.correctAnswers().length)
+  readonly correctAnswerCount = computed(() => this.correctAnswers().length);
+
+  answerCurrentQuestion(answerIndex: number) {
+    console.log ("answerCurrentQuestion", answerIndex);
+    this.#userAnswers.update((answers) => [...answers, answerIndex]);
+  }
 
 
 constructor() {
