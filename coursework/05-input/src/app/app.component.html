@@ -1,32 +1,24 @@
-<h1> Currency Converter</h1>
+<h1>Currency Converter</h1>
 <label>Amount</label>
-<input type="number" [formControl]="amount">
+<input type="number" [formControl]="amount" />
 
 <label>Currency</label>
 
-<!---->
 <app-option-selector 
-   [options]="currencies"
-   [(selected)]="currency"/>
-<!---->
-<button (click)="stopRefresh()">Stop Refresh Events</button>
+  [options]="currencies" 
+  [(selected)]="currency">
 
-<app-currency-converter 
-  [amount]="amount.value!" 
+  <span *appOption="let currency" class="currency-option">
+    <img [src]="'/icons/' + currency + '.svg'" alt="{{ currency }}" class="currency-icon"/>
+    {{ currency }}
+  </span>
+
+</app-option-selector>
+
+<app-currency-converter
+  [amount]="amount.value!"
   [currency]="currency()"
-  (refreshRequired)="refreshData()">
-  />
-
-<app-currency-converter 
-  [amount]="amount.value!" 
-  [currency]="currency()"
-  (refreshRequired)="refreshData()">
-  />
-
+  (refreshRequired)="refreshData()"
+/>
 
 <button (click)="stopRefresh()">Stop Refresh Events</button>
-<app-currency-converter 
-  [amount]="amount.value!" 
-  [currency]="currency()"
-  (refreshRequired)="refreshData()">
-  />
