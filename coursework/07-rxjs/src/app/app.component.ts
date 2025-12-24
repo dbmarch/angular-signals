@@ -21,7 +21,10 @@ export class AppComponent {
 
   readonly api = inject(ApiService);
 
-  readonly primeFactors = toSignal(this.results, { initialValue: [] });
+  readonly primeFactors = toSignal(this.results, { 
+    initialValue: [],
+    manualCleanup: false
+ });
 
   increase() {
     this.number.update(n => n + 1);
@@ -33,7 +36,11 @@ export class AppComponent {
 
 constructor () {
   this.number$.subscribe( n=> {
-    console.log('Number changed to ', n);
+    this.number$.subscribe( n => console.log ('Observable subscription 1', n));
+    console.log ("Creating 2nd subcription")
+    setTimeout(() => {
+      this.number$.subscribe(n => console.log('Observable subscription 2', n));
+    }, 5000);
   })
 }
 
