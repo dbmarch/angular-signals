@@ -11,12 +11,16 @@ import { ManagedInputDirective } from './components/input-manager/managed-input.
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-
+  
   // add a proper view query (hint, use the # reference string)
-
+  readonly textInput = viewChild.required<ElementRef>('txtInput');
+  
+  
   onSelect() {
+    
     // use the view query to select the input
     // hint, use the 'select' method on the native element
+    this.textInput().nativeElement.select();
   }
 
 }
