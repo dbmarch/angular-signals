@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, contentChild, contentChildren, effect, input, model, signal } from '@angular/core';
-import { OptionDirective } from './option.directive';
+import { Component, input, model, signal } from '@angular/core';
 
 @Component({
   selector: 'app-option-selector',
@@ -10,10 +9,9 @@ import { OptionDirective } from './option.directive';
   styleUrl: './option-selector.component.scss'
 })
 export class OptionSelectorComponent {
-  readonly options = input.required<string[]>();
-  readonly templateDirective = contentChild(OptionDirective);
+  options = input.required<string[]>();
 
-  readonly selected = model.required();
+  selected = model.required<string>() 
 
   select(option: string) {
     this.selected.set(option);
