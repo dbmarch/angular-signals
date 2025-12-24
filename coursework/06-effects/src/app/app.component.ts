@@ -18,13 +18,14 @@ export class AppComponent {
   }
 
   constructor() {
-    effect(()=>{
+    effect(async ()=>{
       if (this.x() > 12) {
         console.log('x is greater than 12');
+        await new Promise(resolve => setTimeout(resolve, 1000));
         this.isLarge.set(true);
       }
     }, {
-      allowSignalWrites: true
+      // allowSignalWrites: true
     });
   }
 }
