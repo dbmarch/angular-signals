@@ -1,16 +1,16 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Question } from '../models/question.model';
+import { Answer } from '../models/answer.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExamService {
-
     // list of questions
     // list of user provided answers
     // isBusy
 
-    readonly questions = signal <Question[]>([
+    readonly #questions = signal <Question[]>([
       {
         caption: "How much is 4 + 4",
         answers: [ '4', '8', '12', '16'],
@@ -27,9 +27,22 @@ export class ExamService {
         correctAnswerIndex: 1
       }
     ]);
+  readonly questions = this.#questions.asReadonly;
 
-  readonly usersAnswers = signal<number[]>([]);
-  readonly isBusy= signal<boolean>(false);
+  readonly #userAnswers = signal<number[]>([]);
+  readonly userAnswers  = computed( ()=> this.#userAnswers().map((ans, index: number) => ({
+    userAnswerIndex: ans,
+    isCorrect: ans === this.questions()[index]?.correctAnswerIndex
+  })));
+  
+  readonly #isBusy= signal<boolean>(false);
+  readonly isBusy = this.#isBusy.asReadonly;
+
+  readonly currentQuestionIndex = computed(() => this.userAnswers().length);
+  readonly currentQuestion = computed (() => this.currentQuestionIndex() ?? null);
+
+  readonly questionsCount = computed (() => this.questions().length);
+  readonly isQuizDone = computed(() => this.userAnswers().length == this.questionsCount())
 
 constructor() {}
 }
