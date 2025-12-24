@@ -1,3 +1,9 @@
+<div class="level">
+    <button (click)="store.decreaseLevel()">-</button>
+    <h1>Difficulty: {{store.level()}}</h1>
+    <button (click)="store.increaseLevel()">+</button>
+</div>
+
 <app-progress 
    [value]="store.currentQuestionIndex()" 
    [max]="store.questionsCount()"/>
@@ -12,3 +18,9 @@
       (answered) ="store.answerCurrentQuestion($event)" />
 }
 
+@if(store.isBusy()) {
+    <div class="busy">
+        <div class="spinner"></div>
+        Please wait...
+    </div>    
+}

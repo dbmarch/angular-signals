@@ -1,6 +1,10 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal, inject } from '@angular/core';
 import { Question } from '../models/question.model';
 import { Answer } from '../models/answer.model';
+import { BehaviorSubject } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { tap, switchMap } from 'rxjs';
+import { ExamGeneratorService } from './exam-generator.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +13,7 @@ export class ExamService {
     // list of questions
     // list of user provided answers
     // isBusy
+  readonly #generateExam$ = new BehaviorSubject<number>(1);
 
   readonly #questions = signal <Question[]>([
       {
@@ -35,6 +40,8 @@ export class ExamService {
 
   // Computed 
   readonly questions = this.#questions.asReadonly;
+  readonly level = toSignal(this.#generateExam$);
+
   readonly userAnswers  = computed<Answer[]>(() => this.#userAnswers().map<Answer>((ans, index) => ({
     userAnswerIndex: ans,
     isCorrect: ans === (this.#questions()[index]?.correctAnswerIndex ?? null)
@@ -61,6 +68,17 @@ export class ExamService {
     this.#userAnswers.update((answers) => [...answers, answerIndex]);
   }
 
+  increaseLevel() {
+    this.#generateExam$.next(this.#generateExam$.value + 1);
+  }
+
+  decreaseLevel() {
+    this.#generateExam$.next(this.#generateExam$.value - 1);
+  }
+
+  repeatLevel() {
+    this.#generateExam$.next(this.#generateExam$.value);
+  }
 
 constructor() {
   console.log ('isQuizDone', this.isQuizDone());
@@ -70,6 +88,19 @@ constructor() {
   console.log ('this.#userAnswers().length', this.#userAnswers().length);
   console.log ('questionsCount', this.questionsCount());
   
+  const generator = inject(ExamGeneratorService);
+
+
+  this.#generateExam$.pipe(
+    tap(level => this.#isBusy.set(true)),
+    switchMap(level => generator.generateExam(level)),
+    tap(questions => {
+      this.#questions.set(questions);
+      this.#userAnswers.set([]);
+      this.#isBusy.set(false);
+    })
+  ).subscribe();
+
   
 }
 }
