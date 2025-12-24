@@ -13,29 +13,27 @@ import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-int
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CurrencyConverterComponent {
-  private readonly stop$ = new Subject<void>();
+  readonly manualRefresh$ = new BehaviorSubject<void>(undefined);
 
+  private readonly stop$ = new Subject<void>();
   stopRefresh() {
-    console.log('stopping');
     this.stop$.next();
   }
 
-  readonly manualRefresh$ = new BehaviorSubject<void>(undefined);
   readonly refreshRequired$ = this.manualRefresh$.pipe(
-    switchMap(() => interval(5000).pipe(startWith(0))),
+    switchMap(() => interval(2000).pipe(startWith(0))),
     map(() => {}),
-    takeUntilDestroyed(),
+    takeUntilDestroyed(), 
     takeUntil(this.stop$)
-  )
+  );
+
 
   readonly refreshRequired = outputFromObservable(this.refreshRequired$);
-
+  
   readonly amount = input.required<number>();
-
   readonly currency = input.required<string>();
 
   readonly rate = computed(() => RATES[this.currency()]);
-
   readonly converted = computed(() => this.amount() * this.rate());
-
+  
 }
