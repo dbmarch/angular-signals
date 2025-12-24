@@ -11,7 +11,9 @@
 @if (store.isQuizDone()) {
    <app-done 
       [correct]="store.correctAnswerCount()" 
-      [total]="store.questionsCount()"/>
+      [total]="store.questionsCount()"
+      (restart)="store.repeatLevel()"
+      />
 } @else {
    <app-question-presenter
       [question]="store.currentQuestion()"

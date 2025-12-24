@@ -49,11 +49,11 @@ export class ExamService {
   readonly #isBusy= signal<boolean>(false);
   readonly currentQuestionIndex = computed(() => this.#userAnswers().length);
   readonly currentQuestion = computed (() => {
-    console.log ('currentQuestionIndex', this.currentQuestionIndex());
+    // console.log ('currentQuestionIndex', this.currentQuestionIndex());
     return this.#questions()[this.currentQuestionIndex()];
   });
 
-  readonly isBusy = this.#isBusy.asReadonly;
+  readonly isBusy = this.#isBusy.asReadonly();
   readonly questionsCount = computed (() => this.#questions().length);
   readonly isQuizDone = computed(() => this.#userAnswers().length == this.questionsCount())
 
@@ -64,7 +64,7 @@ export class ExamService {
   readonly correctAnswerCount = computed(() => this.correctAnswers().length);
 
   answerCurrentQuestion(answerIndex: number) {
-    console.log ("answerCurrentQuestion", answerIndex);
+    // console.log ("answerCurrentQuestion", answerIndex);
     this.#userAnswers.update((answers) => [...answers, answerIndex]);
   }
 
@@ -98,6 +98,7 @@ constructor() {
       this.#questions.set(questions);
       this.#userAnswers.set([]);
       this.#isBusy.set(false);
+      // console.log('isBusy', this.#isBusy(), this.isBusy());
     })
   ).subscribe();
 
