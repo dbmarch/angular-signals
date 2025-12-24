@@ -4,7 +4,8 @@ import {
   viewChild,
   ElementRef,
   ViewContainerRef,
-  viewChildren
+  viewChildren,
+  effect
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { RATES } from './components/currency-converter/rates';
@@ -51,4 +52,25 @@ export class AppComponent {
   refreshData() {
     console.log('refreshData');
   }
+
+  constructor() {
+    console.log('AppComponent constructor');
+    console.log('this.currencyConverters', this.currencyConverters());
+    effect(() => {
+      console.log('effect this.currencyConverters', this.currencyConverters());
+      console.log('effect this.currencyConverter', this.currencyConverter());
+    });
+  }
+
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit');
+    console.log('this.currencyConverters', this.currencyConverters());
+    console.log('this.currencyConverter', this.currencyConverter());
+  }
+
+  ngOnInit(): void {
+          console.log('effect this.currencyConverter', this.currencyConverter());
+
+  }
 }
+

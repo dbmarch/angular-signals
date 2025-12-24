@@ -5,9 +5,9 @@
 <label>Currency</label>
 
 <!---->
-<app-option-selector [options]="currencies"
-  [(selected)]="currency"
-  />
+<app-option-selector 
+   [options]="currencies"
+   [(selected)]="currency"/>
 <!---->
 <button (click)="stopRefresh()">Stop Refresh Events</button>
 
@@ -17,6 +17,16 @@
   (refreshRequired)="refreshData()">
   />
 
-<div #myRef></div>
+<app-currency-converter 
+  [amount]="amount.value!" 
+  [currency]="currency()"
+  (refreshRequired)="refreshData()">
+  />
+
 
 <button (click)="stopRefresh()">Stop Refresh Events</button>
+<app-currency-converter 
+  [amount]="amount.value!" 
+  [currency]="currency()"
+  (refreshRequired)="refreshData()">
+  />
