@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class Api {
   getRandomNumberAsync(abortSignal?: AbortSignal) {
     console.log('[API] Getting a random number...');
-    return new Promise<number>((resolve) => {
+    return new Promise<number>((resolve, reject) => {
       let handle: number | null = null;
       handle = setTimeout(() => {
         const res = Math.floor(Math.random() * 100);
@@ -23,16 +23,22 @@ export class Api {
     });
   }
 
-  mutiplyByFiveAsync(value: number) {
+  mutiplyByFiveAsync(value: number, abortSignal?: AbortSignal) {
     // this function returns the value times 5 after a delay of 3 seconds
 
     console.log('[API] Getting a multiplier for seed', value);
-    return new Promise<number>((resolve) => {
+    return new Promise<number>((resolve, reject) => {
       setTimeout(() => {
         const res = value * 5;
+        if (value === 57) {
+          reject('invalid value')
+        } else {
         console.log('[API] Multiplier received', res);
         resolve(res);
+
+        }
       }, 3000);
+      
     });
   }
 }

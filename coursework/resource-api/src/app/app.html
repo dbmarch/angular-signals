@@ -8,8 +8,13 @@
 </div>
 
 <div class="resource-state">
-  <span class="label">Value</span>
-  <span class="value">{{apiNumber.value()}}</span>
+  @if(apiNumber.error()) {
+    <span class="label">Error</span>
+    <span class="value">{{apiNumber.error()?.cause}}</span>
+  }@else {
+    <span class="label">Value</span>
+    <span class="value">{{apiNumber.value()}}</span>
+  }
   <span class="label">Status</span>
   <span class="status" [attr.data-status]="apiNumber.status()">{{apiNumber.status()}}</span>
   @if(apiNumber.isLoading()) {
