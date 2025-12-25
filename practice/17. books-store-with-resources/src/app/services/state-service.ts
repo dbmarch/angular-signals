@@ -62,6 +62,7 @@ export class StateService {
       const res = signal<ResourceStreamItem<number>>({value: 0});
       if (options.params.id) {
         const ws = new WebSocket(`${this.wsBase}/stock/${options.params.id}`)
+        
         ws.onmessage = (event ) => {
           const data = JSON.parse(event.data);
           if (data?.stock !== undefined) {
@@ -69,6 +70,12 @@ export class StateService {
             res.set({value: data.stock});
           }
         }
+
+        options.abortSignal.addEventListener('abort', () => {
+          console.log ("closing ws");
+          ws.close();
+        });
+
       }
       return res;
     }
@@ -94,7 +101,7 @@ export class StateService {
   get selectedStock() {
     return this.#selectedStock.asReadonly();
   }
-  
+
   setKeyword(value: string) {
     this.#keyword.set(value);
     // console.log (this.keyword())
