@@ -1,10 +1,10 @@
-import { inject, Injectable, linkedSignal, resource, signal } from '@angular/core';
+import { inject, Injectable, linkedSignal, resource, signal, ɵresetJitOptions } from '@angular/core';
 import { Book } from '../models/book';
 import { httpResource, HttpClient } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { of } from 'rxjs';
+import { map, of } from 'rxjs';
 import { ResourceStreamItem } from '@angular/core';
-import { ThisReceiver } from '@angular/compiler';
+import { webSocketObservable } from '../tools/web-socket-observable';
 
 @Injectable({
   providedIn: 'root'
@@ -55,31 +55,43 @@ export class StateService {
     defaultValue: null
   })
 
-  #selectedStock = resource({
-    params: () => ({id: this.#selectedBookId()}),
-    // async makes the function return a promise.
-    stream: async (options) => {
-      const res = signal<ResourceStreamItem<number>>({value: 0});
-      if (options.params.id) {
-        const ws = new WebSocket(`${this.wsBase}/stock/${options.params.id}`)
+
+  // resource works best for promises and not streaming.  Observers are meant for streaming.
+    // #selectedStock = resource({
+    // params: () => ({id: this.#selectedBookId()}),
+    // // async makes the function return a promise.
+    // stream: async (options) => {
+    //   const res = signal<ResourceStreamItem<number>>({value: 0});
+    //   if (options.params.id) {
+    //     const ws = new WebSocket(`${this.wsBase}/stock/${options.params.id}`)
         
-        ws.onmessage = (event ) => {
-          const data = JSON.parse(event.data);
-          if (data?.stock !== undefined) {
-            console.log('data', data)
-            res.set({value: data.stock});
-          }
-        }
+    //     ws.onmessage = (event ) => {
+    //       const data = JSON.parse(event.data);
+    //       if (data?.stock !== undefined) {
+    //         console.log('data', data)
+    //         res.set({value: data.stock});
+    //       }
+    //     }
 
-        options.abortSignal.addEventListener('abort', () => {
-          console.log ("closing ws");
-          ws.close();
-        });
+    //     options.abortSignal.addEventListener('abort', () => {
+    //       console.log ("closing ws");
+    //       ws.close();
+    //     });
 
+    //   }
+    //   return res;
+    // }
+    // })
+
+    #selectedStock = rxResource({
+      params: () => ({id: this.#selectedBookId()}),
+      stream: (options) => {
+        if (!options.params.id) return of(0);
+        return webSocketObservable<{stock: number}>(`${this.wsBase}/stock/${options.params.id}`).pipe(
+          map (data => data.stock )
+        )
       }
-      return res;
-    }
-    })
+    });
 
   get keyword() {
     return this.#keyword.asReadonly();
@@ -112,9 +124,9 @@ export class StateService {
   }
 
 
-#searchkeywordPromise(value: string, abortSignal?: AbortSignal ): Promise<Book[]> {
-  return fetch(`${this.apiBase}/search/?q=${value}`, {signal: abortSignal})
-      .then( resp => resp.json())
+  #searchkeywordPromise(value: string, abortSignal?: AbortSignal ): Promise<Book[]> {
+    return fetch(`${this.apiBase}/search/?q=${value}`, {signal: abortSignal})
+        .then( resp => resp.json())
 }
 
 constructor() {}
