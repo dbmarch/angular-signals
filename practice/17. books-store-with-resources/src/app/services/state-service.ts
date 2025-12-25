@@ -3,6 +3,8 @@ import { Book } from '../models/book';
 import { httpResource, HttpClient } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
+import { ResourceStreamItem } from '@angular/core';
+import { ThisReceiver } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,6 @@ export class StateService {
 
 // Private signals
   #keyword = signal<string>('the');
-
 
 // this is how you implement with resource
   // #searchResults = resource({
@@ -54,6 +55,24 @@ export class StateService {
     defaultValue: null
   })
 
+  #selectedStock = resource({
+    params: () => ({id: this.#selectedBookId()}),
+    // async makes the function return a promise.
+    stream: async (options) => {
+      const res = signal<ResourceStreamItem<number>>({value: 0});
+      if (options.params.id) {
+        const ws = new WebSocket(`${this.wsBase}/stock/${options.params.id}`)
+        ws.onmessage = (event ) => {
+          const data = JSON.parse(event.data);
+          if (data?.stock !== undefined) {
+            console.log('data', data)
+            res.set({value: data.stock});
+          }
+        }
+      }
+      return res;
+    }
+    })
 
   get keyword() {
     return this.#keyword.asReadonly();
@@ -72,6 +91,10 @@ export class StateService {
     return this.#selectedBook.asReadonly();
   }
 
+  get selectedStock() {
+    return this.#selectedStock.asReadonly();
+  }
+  
   setKeyword(value: string) {
     this.#keyword.set(value);
     // console.log (this.keyword())
