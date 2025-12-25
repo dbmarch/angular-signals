@@ -1,3 +1,6 @@
+@if(state.searchResults.isLoading()){
+  <app-busy />
+}
 <div class="scrollable">
   @for(b of state.searchResults.value(); track b.id) {
   <div

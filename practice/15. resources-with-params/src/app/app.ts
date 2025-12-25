@@ -13,7 +13,8 @@ export class App {
   readonly source = signal(50);
 
   readonly apiNumber = resource({
-    loader: (options) => this.api.getRandomNumberAsync(options.abortSignal), 
+    params: () => ({value: this.source}),
+    loader: (options) => this.api.mutiplyByFiveAsync(options.params.value(), options.abortSignal), 
     defaultValue: -1
   });
 

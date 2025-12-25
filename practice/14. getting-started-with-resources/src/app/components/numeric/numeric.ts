@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-numeric',
+  standalone: true,
   imports: [FormsModule],
   templateUrl: './numeric.html',
   styleUrl: './numeric.scss'

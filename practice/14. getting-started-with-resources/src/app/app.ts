@@ -11,6 +11,7 @@ import { Api } from './services/api';
 export class App {
   readonly api = inject(Api);
 
+  
   readonly apiNumber = resource({
     loader: (options) => this.api.getRandomNumberAsync(options.abortSignal), 
     defaultValue: -1

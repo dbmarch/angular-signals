@@ -1,5 +1,6 @@
 import { Injectable, resource, signal } from '@angular/core';
 import { Book } from '../models/book';
+import { httpResource } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,20 @@ export class StateService {
   readonly wsBase: string = 'ws://localhost:3000/ws';
   #keyword = signal<string>('the');
 
-  #searchResults = resource({
-    params: () => ({ keyword: this.#keyword()}),
-    loader: (options) => this.#searchkeywordPromise(options.params.keyword),
+
+// this is how you implement with resource
+  // #searchResults = resource({
+  //   params: () => ({ keyword: this.#keyword()}),
+  //   loader: (options) => this.#searchkeywordPromise(options.params.keyword, options.abortSignal),
+  //   defaultValue: []
+  // })
+#searchResults = httpResource<Book[]>(() => ({
+  url: `${this.apiBase}/search`,
+  params: { q: this.#keyword() }, 
+}), {
     defaultValue: []
-  })
+  }
+);
 
   get keyword() {
     return this.#keyword.asReadonly();
@@ -30,14 +40,11 @@ export class StateService {
     // console.log (this.keyword())
   }
 
-#searchkeywordPromise(value: string): Promise<Book[]> {
-  return fetch(`${this.apiBase}/search/?q=${value}`)
-    .then( resp => resp.json())
+#searchkeywordPromise(value: string, abortSignal?: AbortSignal ): Promise<Book[]> {
+  return fetch(`${this.apiBase}/search/?q=${value}`, {signal: abortSignal})
+      .then( resp => resp.json())
 }
 
+constructor() {}
 
-
-  constructor() {
-
-  }
 }
