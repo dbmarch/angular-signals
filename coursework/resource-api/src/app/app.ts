@@ -14,7 +14,7 @@ export class App {
   readonly api = inject(Api);
 
   readonly apiNumber = resource( {
-    loader: () => this.api.getRandomNumberAsync(),
+    loader: (options) => this.api.getRandomNumberAsync(options.abortSignal),
     defaultValue: -1
 });
 
@@ -22,6 +22,10 @@ export class App {
     this.apiNumber.reload();
   }
 
+  setLocalValue(val: number){
+    this.apiNumber.set(val);
+  }
+  
   constructor() {
     this.apiNumber.status();
   }
