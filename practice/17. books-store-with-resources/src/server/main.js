@@ -17,6 +17,13 @@ try {
     console.error("Failed to load books.json:", e);
 }
 
+
+// app.use(function(req, res, next) {
+// 	res.header('Access-Control-Allow-Origin', '*');
+// 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+// 	next();
+// });
+
 // --- CORS for localhost:4200 ---
 app.use(cors({ origin: "http://localhost:4200" }));
 
