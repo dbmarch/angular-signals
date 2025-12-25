@@ -3,6 +3,7 @@ import { Api } from './services/api';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -10,11 +11,19 @@ import { Api } from './services/api';
 export class App {
   readonly api = inject(Api);
 
-  readonly apiNumber = null;
+  readonly apiNumber = resource({
+    loader: (options) => this.api.getRandomNumberAsync(options.abortSignal), 
+    defaultValue: -1
+  })
 
   reloadNumber() {
+    console.log('Reload');
+    this.apiNumber.reload();
+    
   }
 
   setLocalValue(val: number) {
+    console.log('setLocalValue', val);
+    this.apiNumber.set(val);
   }
 }
