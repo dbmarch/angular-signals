@@ -1,7 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DinnerReview } from './models/dinner-review.model';
-import { email, Field, form, minLength, required } from '@angular/forms/signals'
+import { customError, email, Field, form, minLength, required, validate } from '@angular/forms/signals'
+import { ValueChangeEvent } from '@angular/forms';
 
 
 @Component({
@@ -34,6 +35,18 @@ export class App {
     minLength(path.description, 5, {
       message: 'Description must be great than 5 chars'
     });
+    validate(path.description, (ctx) => {
+      const value = ctx.value();
+
+      const wordCount = value.trim().split(/\s+/).length;
+      if (wordCount < 10) {
+        return customError({
+          kind: 'min-words',
+          message: `Description needs to be at least 10 words long.\n Wordcount: ${wordCount}`
+        })
+      }
+      return undefined;
+    })
   });
 
   
