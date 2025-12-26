@@ -16,6 +16,7 @@ import {
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [CommonModule, Field],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -39,6 +40,20 @@ export class App {
       },
     ],
   });
+
+  addReviewItem() {
+    this.model.update(state => ({
+      ...state,
+      reviews: [
+        ...state.reviews,
+        {
+          aspect: '',
+          rating: 3,
+          recommendation: 'no-opinion'
+        }
+      ]
+    }))
+  }
 
   readonly reviewForm = form(this.model, (path) => {
     required(path.username, {

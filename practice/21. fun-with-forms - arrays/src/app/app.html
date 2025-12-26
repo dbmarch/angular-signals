@@ -47,7 +47,8 @@
     }
   </div>
 
-  <!-- <div class="sub-form">
+  @for(rev of reviewForm.reviews; track $index) {
+  <div class="sub-form">
     <div class="field">
       <label>Aspect:</label>
       <input
@@ -83,7 +84,11 @@
       @for(err of rev.recommendation().errors(); track err.kind) {
       <div class="error">{{ err.message }}</div>
       }
-    </div> -->
+    </div>
+  </div>
+  }
+
+  <button (click)="addReviewItem()">Add Review</button>
 
   <button [disabled]="!reviewForm().valid()">Submit</button>
 </div>
