@@ -7,12 +7,15 @@ import {
   Field,
   form,
   minLength,
+  max,
+  min,
   required,
   validate,
 } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [CommonModule, Field],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -44,6 +47,16 @@ export class App {
     email(path.email, {
       message: 'Email is not in the correct format',
     });
+
+    max(path.food.rating, 5, {
+      message: 'Rating must be under 5'
+    });
+    
+    min(path.food.rating, 1, {
+      message: 'Rating must be above 1'
+    });
+
+    
     validate(path.description, (ctx) => {
       const value = ctx.value();
       const threshold = ctx.valueOf(path.role) === 'author' ? 10 : 5;
@@ -60,4 +73,6 @@ export class App {
       return undefined;
     });
   });
+
+
 }
