@@ -17,10 +17,12 @@ import {
   validateTree,
 } from '@angular/forms/signals';
 import { ReviewsService } from './services/reviews-service';
+import { FieldStyleDirective } from '../shared/field-styling.directive';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, Field],
+  standalone: true,
+  imports: [CommonModule, Field, FieldStyleDirective],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
