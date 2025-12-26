@@ -20,11 +20,20 @@ export class App {
     rating: 1,
   })
 
+  // Validation Schema
   readonly reviewForm = form(this.model, path => {
-    required(path.username);
-    required(path.email);
-    email(path.email);
-    minLength(path.description, 5);
+    required(path.username, {
+      message: 'Username is required'
+    });
+    required(path.email, {
+      message: 'Email is required'
+    });
+    email(path.email, {
+      message: 'Valid email address required'
+    });
+    minLength(path.description, 5, {
+      message: 'Description must be great than 5 chars'
+    });
   });
 
   
