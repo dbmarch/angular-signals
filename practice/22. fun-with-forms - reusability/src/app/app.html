@@ -3,7 +3,7 @@
 }
 <div class="form">
   <h3>Dinner Review Form</h3>
-  <app-field label="Username:">
+  <app-field label="Username">
     <input
       type="text"
       [field]="reviewForm.username"
@@ -11,7 +11,7 @@
     />
   
   </app-field>
-  <app-field label="Role:">
+  <app-field label="Role">
     <select
       [field]="reviewForm.role"
       [class.invalid]="reviewForm.role().invalid() && reviewForm.role().touched()"
@@ -21,14 +21,14 @@
       <option value="chef">Chef</option>
     </select>
   </app-field>
-  <app-field label="Email:">
+  <app-field label="Email">
     <input
       type="email"
       [field]="reviewForm.email"
       [class.invalid]="reviewForm.email().invalid() && reviewForm.email().touched()"
     />
   </app-field>
-  <app-field label="Description:">
+  <app-field label="Description">
     <textarea
       [field]="reviewForm.description"
       [class.invalid]="reviewForm.description().invalid() && reviewForm.description().touched()"
@@ -38,7 +38,7 @@
   @for(rev of reviewForm.reviews; track $index) {
   <div class="sub-form">
     <button (click)="removeItem($index)">Remove</button>
-    <app-field label="Aspect:" >
+    <app-field label="Aspect" >
       <input
         type="text"
         [field]="rev.aspect"
@@ -52,7 +52,7 @@
         [class.invalid]="rev.rating().invalid() && rev.rating().touched()"
       />
     </app-field>
-    <app-field label="Recommendation:">
+    <app-field label="Recommendation">
       <select
         [field]="rev.recommendation"
         [class.invalid]="rev.recommendation().invalid() && rev.recommendation().touched()"

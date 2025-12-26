@@ -12,8 +12,8 @@ export class FieldWrapper {
   readonly fieldDirective = contentChild.required(Field);
 
   readonly fieldState = computed(() => this.fieldDirective().state());
-  readonly errors = computed(() => this.fieldState().errors())
-
+  readonly errors = computed(() => this.fieldState().errors());
+  readonly required = computed(() => this.fieldState().required());
   constructor() {
     effect(() => {
       console.log ('The field Directive is ', this.fieldDirective());
