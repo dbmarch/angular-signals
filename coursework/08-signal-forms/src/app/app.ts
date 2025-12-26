@@ -30,6 +30,7 @@ export class App {
   
 
   constructor() {
-    // console.log (this.reviewForm);
+    console.log (this.reviewForm());
+    const x = this.reviewForm();
   }
 }
