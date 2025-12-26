@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DinnerReview } from './models/dinner-review.model';
+import { ReviewItemForm} from './shared/review-item-form/review-item-form';
 import {
   applyEach,
   customError,
@@ -22,7 +23,8 @@ import { FieldWrapper } from './shared/field-wrapper/field-wrapper';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, Field, FieldStyleDirective, FieldWrapper],
+  standalone: true,
+  imports: [CommonModule, Field, FieldStyleDirective, FieldWrapper, ReviewItemForm],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

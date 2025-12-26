@@ -3,6 +3,7 @@ import { Field } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-field',
+  standalone: true,
   imports: [],
   templateUrl: './field-wrapper.html',
   styleUrl: './field-wrapper.scss',

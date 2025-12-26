@@ -3,6 +3,7 @@ import { FieldTree } from "@angular/forms/signals";
 
 @Directive({
     selector: '[field]', 
+    standalone: true,
     host: {
         '[class.invalid]': 'invalid()', 
         '[class.valid]': 'valid()', 
