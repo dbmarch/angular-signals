@@ -17,12 +17,13 @@ import {
   validateTree,
 } from '@angular/forms/signals';
 import { ReviewsService } from './services/reviews-service';
-import { FieldStyleDirective } from '../shared/field-styling.directive';
+import { FieldStyleDirective } from './shared/field-styling.directive';
+import { FieldWrapper } from './shared/field-wrapper/field-wrapper';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, Field, FieldStyleDirective],
+  imports: [CommonModule, Field, FieldStyleDirective, FieldWrapper ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

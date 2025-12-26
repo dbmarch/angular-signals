@@ -1,0 +1,6 @@
+<ng-content>
+
+</ng-content>
+@for(err of errors(); track err.kind) {
+   <div class="error">{{ err.message }}</div>
+   }
