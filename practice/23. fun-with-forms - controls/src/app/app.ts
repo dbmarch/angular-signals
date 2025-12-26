@@ -20,7 +20,8 @@ import {
 import { ReviewsService } from './services/reviews-service';
 import { FieldStyleDirective } from './shared/field-styling.directive';
 import { FieldWrapper } from './shared/field-wrapper/field-wrapper';
-
+import { apply } from '@angular/forms/signals';
+import { reviewItemSchema } from './schemas/review-item-schema';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -52,18 +53,21 @@ export class App {
     required(path.username, {
       message: 'Username is required',
     });
+
     required(path.email, {
       message: 'Email is required',
       when: (ctx) => ctx.valueOf(path.role) !== 'author',
     });
+
     email(path.email, {
       message: 'Email is not in the correct format',
     });
+
     disabled(path, ctx => ctx.state.submitting());
+
     validate(path.description, (ctx) => {
       const value = ctx.value();
       const threshold = ctx.valueOf(path.role) === 'author' ? 10 : 5;
-
       // check that there are at least 10 words
       const wordCount = value.trim().split(/\s+/).length;
       if (wordCount < threshold) {
@@ -72,44 +76,11 @@ export class App {
           message: `Description needs to be at least ${threshold} words long (currently there are ${wordCount} words)`,
         });
       }
-
       return undefined;
     });
 
-    // applyEach(path.reviews, (p) => {
-    //   min(p.rating, 1, {
-    //     message: 'Min 1',
-    //   });
-
-    //   max(p.rating, 5, {
-    //     message: 'Max 5',
-    //   });
-
-    //   required(p.aspect, {
-    //     message: 'Aspect is mandatory',
-    //   });
-
-    //   validateTree(p, (ctx) => {
-    //     const rating = ctx.valueOf(p.rating);
-    //     const recommendation = ctx.valueOf(p.recommendation);
-    //     if (rating >= 4 && recommendation === 'not-recommend') {
-    //       return [
-    //         customError({
-    //           kind: 'rating-conflict',
-    //           message: 'Rating Conflict',
-    //           field: ctx.field.rating,
-    //         }),
-    //         customError({
-    //           kind: 'rating-conflict',
-    //           message: 'Rating Conflict',
-    //           field: ctx.field.recommendation,
-    //         }),
-    //       ];
-    //     }
-
-    //     return undefined;
-    //   });
-    // });
+    apply(path.food, reviewItemSchema);
+    apply(path.service, reviewItemSchema);
   });
 
   onSubmit() {
