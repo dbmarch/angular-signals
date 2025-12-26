@@ -30,44 +30,13 @@
     ></textarea>
   </app-field>
 
-  <div class="sub-form">
-    <h4>Food</h4>
-    <app-field label="Rating">
-      <input
-        type="number"
-        [field]="reviewForm.food.rating"
-      />
-    </app-field>
-    <app-field label="Recommendation">
-      <select
-        [field]="reviewForm.food.recommendation"
-      >
-        <option value="no-opinion">No Opinion</option>
-        <option value="recommend">Would Recommend</option>
-        <option value="not-recommend">Would Not Recommend</option>
-      </select>
-    </app-field>
-  </div>
+  <app-review-form 
+      [field]="reviewForm.food"
+      header="Food"/>
 
-    <div class="sub-form">
-    <h4>Service</h4>
-    <app-field label="Rating">
-      <input
-        type="number"
-        [field]="reviewForm.service.rating"
-      />
-    </app-field>
-    <app-field label="Recommendation">
-      <select
-        [field]="reviewForm.service.recommendation"
-      >
-        <option value="no-opinion">No Opinion</option>
-        <option value="recommend">Would Recommend</option>
-        <option value="not-recommend">Would Not Recommend</option>
-      </select>
-    </app-field>
-  </div>
-
+  <app-review-form 
+      [field]="reviewForm.service"
+      header="Service" />
 
   @if(reviewForm().submitting()) {
   <div>Please wait...</div>

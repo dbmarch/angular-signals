@@ -30,8 +30,7 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/material-icons/iconfont/material-icons.scss"
+              "src/styles.scss"
             ]
           },
           "configurations": {
