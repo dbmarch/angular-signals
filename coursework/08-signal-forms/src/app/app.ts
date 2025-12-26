@@ -27,7 +27,8 @@ export class App {
       message: 'Username is required'
     });
     required(path.email, {
-      message: 'Email is required'
+      message: 'Email is required',
+      when: (ctx) => ctx.valueOf(path.role) !== 'author'      
     });
     email(path.email, {
       message: 'Valid email address required'
@@ -38,11 +39,13 @@ export class App {
     validate(path.description, (ctx) => {
       const value = ctx.value();
 
+      const threshold = ctx.valueOf(path.role) === 'author'? 10 : 5;
+
       const wordCount = value.trim().split(/\s+/).length;
-      if (wordCount < 10) {
+      if (wordCount < threshold) {
         return customError({
           kind: 'min-words',
-          message: `Description needs to be at least 10 words long.\n Wordcount: ${wordCount}`
+          message: `${wordCount} /  ${threshold} words`
         })
       }
       return undefined;
