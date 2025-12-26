@@ -12,6 +12,7 @@ import {
   minLength,
   required,
   validate,
+  validateTree,
 } from '@angular/forms/signals';
 
 @Component({
@@ -86,8 +87,40 @@ export class App {
           message: `Description needs to be at least ${threshold} words long (currently there are ${wordCount} words)`,
         });
       }
-
       return undefined;
     });
+
+    applyEach(path.reviews, p => {
+      min(p.rating, 1, {
+        message: 'Min 1'
+      });
+      max(p.rating, 5, {
+        message: 'Min 5'
+      });
+      required(p.aspect, {
+        message: 'Aspect is mandatory'
+      });
+
+      validateTree(p, ctx=> {
+        const rating = ctx.valueOf(p.rating);
+        const recommendation = ctx.valueOf(p.recommendation);
+        if (rating >= 4 && recommendation === 'not-recommend') {
+          return [
+            customError({
+              kind: 'rating-conflict',
+              message: 'Rating conflict',
+              field: ctx.field.rating
+            }),
+            customError({
+              kind: 'rating-conflict',
+              message: 'Rating conflict',
+              field: ctx.field.recommendation
+            })
+
+          ]
+        }
+        return undefined;
+      })
+    })
   });
 }
