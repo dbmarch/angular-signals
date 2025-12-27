@@ -22,6 +22,8 @@ import { FieldStyleDirective } from './shared/field-styling.directive';
 import { FieldWrapper } from './shared/field-wrapper/field-wrapper';
 import { apply } from '@angular/forms/signals';
 import { reviewItemSchema } from './schemas/review-item-schema';
+import { minWords } from './schemas/min-words-validator'
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -65,19 +67,7 @@ export class App {
 
     disabled(path, ctx => ctx.state.submitting());
 
-    validate(path.description, (ctx) => {
-      const value = ctx.value();
-      const threshold = ctx.valueOf(path.role) === 'author' ? 10 : 5;
-      // check that there are at least 10 words
-      const wordCount = value.trim().split(/\s+/).length;
-      if (wordCount < threshold) {
-        return customError({
-          kind: 'min-words',
-          message: `Description needs to be at least ${threshold} words long (currently there are ${wordCount} words)`,
-        });
-      }
-      return undefined;
-    });
+    minWords(path.description, ctx => ctx.valueOf(path.role) === 'author' ? 10 : 5);
 
     apply(path.food, reviewItemSchema);
     apply(path.service, reviewItemSchema);
