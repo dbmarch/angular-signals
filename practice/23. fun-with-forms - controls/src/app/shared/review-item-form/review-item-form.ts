@@ -3,11 +3,12 @@ import { FieldTree, Field } from "@angular/forms/signals";
 import { ReviewItem } from '../../models/dinner-review.model'
 import { FieldWrapper } from '../field-wrapper/field-wrapper';
 import { FieldStyleDirective } from  '../field-styling.directive';
+import { StarRating } from '../star-rating/star-rating'
 
 @Component({
   selector: 'app-review-form',
   standalone: true,
-  imports: [Field, FieldWrapper, FieldStyleDirective],
+  imports: [Field, FieldWrapper, FieldStyleDirective, StarRating],
   templateUrl: './review-item-form.html',
   styleUrl: './review-item-form.scss',
 })

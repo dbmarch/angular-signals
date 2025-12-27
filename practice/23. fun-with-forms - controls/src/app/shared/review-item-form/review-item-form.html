@@ -1,10 +1,7 @@
   <div class="sub-form">
     <h4>{{header()}}</h4>
     <app-field label="Rating">
-      <input
-        type="number"
-        [field]="field().rating"
-      />
+      <app-star-rating [field]="field().rating" />
     </app-field>
     <app-field label="Recommendation">
       <select
